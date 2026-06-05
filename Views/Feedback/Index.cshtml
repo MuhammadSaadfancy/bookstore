@@ -1,0 +1,501 @@
+﻿@model BookStore.Models.Feedback
+
+@{
+    ViewData["Title"] = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .feedback-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .feedback-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .feedback-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .feedback-header {
+        background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+        padding: 25px 30px;
+        text-align: center;
+        position: relative;
+    }
+
+        .feedback-header h4 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .feedback-header:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #2c3e50;
+        }
+
+    .feedback-body {
+        padding: 40px;
+        background: white;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-label i {
+            color: #3498db;
+            width: 20px;
+        }
+
+    .input-group {
+        position: relative;
+    }
+
+    .form-control {
+        padding: 12px 15px;
+        border: 2px solid #e0e6ed;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+    }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+            background-color: white;
+        }
+
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #3498db;
+        z-index: 10;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #3498db 0%, #2c3e50 100%);
+        border: none;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+    .btn-outline-secondary {
+        border: 2px solid #718096;
+        color: #718096;
+        padding: 14px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-secondary:hover {
+            background: #718096;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .text-muted {
+        color: #718096 !important;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .welcome-text {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 0 20px;
+    }
+
+    .rating-section {
+        margin: 25px 0;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 10px;
+        border-left: 4px solid #3498db;
+    }
+
+    .rating-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+    .stars {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .star {
+        font-size: 2rem;
+        color: #e0e6ed;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .star.active {
+            color: #fbbf24;
+        }
+
+    .selected-rating {
+        text-align: center;
+        color: #3498db;
+        font-weight: 600;
+        margin-top: 10px;
+        font-size: 0.95rem;
+    }
+
+    .feedback-footer {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e6ed;
+        color: #718096;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+    /* Success Message Styles */
+    .alert {
+        border-radius: 10px;
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        animation: slideIn 0.5s ease;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid #10b981;
+    }
+
+        .alert-success i {
+            color: #10b981;
+        }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .feedback-container {
+            padding: 20px 0;
+        }
+
+        .feedback-body {
+            padding: 30px 20px;
+        }
+
+        .feedback-header {
+            padding: 20px;
+        }
+
+            .feedback-header h4 {
+                font-size: 1.5rem;
+            }
+
+        .form-control {
+            padding: 10px 12px;
+        }
+
+        .star {
+            font-size: 1.8rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .feedback-body {
+            padding: 25px 15px;
+        }
+
+        .form-control {
+            padding: 10px 12px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary, .btn-outline-secondary {
+            padding: 12px;
+            font-size: 1rem;
+        }
+
+        .star {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<div class="feedback-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="feedback-card">
+                    <!-- Header -->
+                    <div class="feedback-header">
+                        <h4><i class="fas fa-comment-dots me-2"></i>Share Your Feedback</h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="feedback-body">
+                        <!-- Success Message -->
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                @TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <!-- Welcome Text -->
+                        <div class="welcome-text">
+                            <p class="text-muted">
+                                <i class="fas fa-heart text-danger me-1"></i>
+                                We value your opinion! Your feedback helps us improve our services and provide you with a better experience.
+                            </p>
+                        </div>
+
+                        <form method="post" asp-action="SubmitFeedback" id="feedbackForm">
+                            <!-- Name Field -->
+                            <div class="mb-4">
+                                <label asp-for="user_name" class="form-label">
+                                    <i class="fas fa-user me-1"></i> Your Name *
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="user_name" class="form-control"
+                                           placeholder="Enter your name"
+                                           value="@(User.Identity?.Name ?? "Guest")"
+                                           required />
+                                    @* <div class="input-icon">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div> *@
+                                </div>
+                                <span asp-validation-for="user_name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Rating Section (Optional) -->
+                            <div class="rating-section">
+                                <div class="rating-title">
+                                    <i class="fas fa-star me-2"></i>How would you rate your experience?
+                                </div>
+                                <div class="stars" id="ratingStars">
+                                    <i class="fas fa-star star" data-rating="1"></i>
+                                    <i class="fas fa-star star" data-rating="2"></i>
+                                    <i class="fas fa-star star" data-rating="3"></i>
+                                    <i class="fas fa-star star" data-rating="4"></i>
+                                    <i class="fas fa-star star" data-rating="5"></i>
+                                </div>
+                                <div class="selected-rating" id="selectedRating">
+                                    Click a star to rate (Optional)
+                                </div>
+                                <input type="hidden" id="ratingValue" name="rating" value="0" />
+                            </div>
+
+                            <!-- Message Field -->
+                            <div class="mb-4">
+                                <label asp-for="user_message" class="form-label">
+                                    <i class="fas fa-comment me-1"></i> Your Message *
+                                </label>
+                                <div class="input-group">
+                                    <textarea asp-for="user_message" class="form-control"
+                                              rows="5"
+                                              placeholder="Tell us what you think... What did you like? What can we improve?"
+                                              required></textarea>
+                                    <div class="input-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="user_message" class="text-danger"></span>
+                                <small class="text-muted mt-1 d-block">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Your feedback will help other customers and improve our services.
+                                </small>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                                </button>
+                                <a href="/" class="btn btn-outline-secondary">
+                                    <i class="fas fa-home me-2"></i>Back to Home
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Footer -->
+                        <div class="feedback-footer">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your privacy is important to us. We'll never share your feedback publicly without your permission.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Star Rating System
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingValue').value = rating;
+
+                // Update stars display
+                document.querySelectorAll('.star').forEach(s => {
+                    const starRating = parseInt(s.getAttribute('data-rating'));
+                    if (starRating <= rating) {
+                        s.classList.add('active');
+                        s.classList.remove('fa-star');
+                        s.classList.add('fa-star');
+                    } else {
+                        s.classList.remove('active');
+                        s.classList.remove('fa-star');
+                        s.classList.add('fa-star');
+                    }
+                });
+
+                // Update rating text
+                const ratingText = document.getElementById('selectedRating');
+                const messages = [
+                    "Poor - We need to improve",
+                    "Fair - Could be better",
+                    "Good - Satisfied",
+                    "Very Good - Happy with experience",
+                    "Excellent - Perfect experience!"
+                ];
+                ratingText.innerHTML = `<i class="fas fa-check-circle me-1"></i> You rated: ${rating}/5 - ${messages[rating - 1]}`;
+                ratingText.style.color = '#3498db';
+            });
+
+            // Hover effect
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = parseInt(this.getAttribute('data-rating'));
+                document.querySelectorAll('.star').forEach(s => {
+                    const starRating = parseInt(s.getAttribute('data-rating'));
+                    if (starRating <= hoverRating) {
+                        s.style.color = '#fbbf24';
+                    }
+                });
+            });
+
+            star.addEventListener('mouseleave', function() {
+                const currentRating = parseInt(document.getElementById('ratingValue').value);
+                document.querySelectorAll('.star').forEach(s => {
+                    const starRating = parseInt(s.getAttribute('data-rating'));
+                    if (starRating <= currentRating) {
+                        s.style.color = '#fbbf24';
+                    } else {
+                        s.style.color = '#e0e6ed';
+                    }
+                });
+            });
+        });
+
+        // Form submission with loading state
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Submitting...';
+            submitBtn.disabled = true;
+
+            // Re-enable button after 5 seconds if submission fails
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+        });
+
+        // Character counter for message (optional)
+        const messageTextarea = document.querySelector('textarea[name="user_message"]');
+        if (messageTextarea) {
+            const counter = document.createElement('small');
+            counter.className = 'text-muted mt-1 d-block text-end';
+            counter.id = 'charCounter';
+            counter.innerHTML = '<i class="fas fa-keyboard me-1"></i> Characters: 0';
+            messageTextarea.parentNode.appendChild(counter);
+
+            messageTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                counter.textContent = `Characters: ${length}`;
+                if (length < 10) {
+                    counter.style.color = '#ef4444';
+                } else if (length < 50) {
+                    counter.style.color = '#f59e0b';
+                } else {
+                    counter.style.color = '#10b981';
+                }
+            });
+        }
+    </script>
+}

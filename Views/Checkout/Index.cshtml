@@ -1,0 +1,390 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Add custom CSS for the checkout page -->
+<style>
+    /* Custom styling for checkout page */
+    .checkout-page {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        min-height: 100vh;
+    }
+
+        .checkout-page .container {
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        /* Main heading */
+        .checkout-page h1 {
+            color: #1e293b;
+            font-weight: 800;
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.5px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+            .checkout-page h1::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 4px;
+                background: linear-gradient(90deg, #6366f1, #10b981);
+                border-radius: 2px;
+            }
+
+        /* Row styling - FIXED LAYOUT */
+        .checkout-page .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            gap: 0;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+            min-height: 600px;
+        }
+
+        /* Left column - Order Summary */
+        .checkout-page .col-md-6:first-child {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            padding: 2.5rem;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Right column - Checkout Form */
+        .checkout-page .col-md-6:last-child {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Section headings */
+        .checkout-page h3 {
+            color: #334155;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+            position: relative;
+            font-size: 1.8rem;
+        }
+
+            .checkout-page h3::after {
+                content: "";
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 60px;
+                height: 2px;
+                background: linear-gradient(90deg, #6366f1, #10b981);
+                border-radius: 1px;
+            }
+
+        /* Order Summary Table */
+        .checkout-page .table-responsive {
+            flex: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkout-page .table {
+            margin-bottom: 0;
+            border: none;
+        }
+
+            .checkout-page .table thead {
+                background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            }
+
+            .checkout-page .table th {
+                border: none;
+                padding: 1rem;
+                font-weight: 600;
+                color: black;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+
+            .checkout-page .table td {
+                padding: 1rem;
+                vertical-align: middle;
+                font-size: 1rem;
+                color: #475569;
+                border: none;
+                text-align: center;
+            }
+
+            .checkout-page .table tbody tr {
+                transition: all 0.3s ease;
+                border-bottom: 1px solid #f8fafc;
+            }
+
+                .checkout-page .table tbody tr:hover {
+                    background-color: rgba(99, 102, 241, 0.03);
+                }
+
+        .checkout-page .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(99, 102, 241, 0.02);
+        }
+
+        /* Total Amount */
+        .checkout-page .total-amount {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: #1e293b;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-top: auto;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .checkout-page .total-amount::before {
+                content: "💰";
+                font-size: 1.5rem;
+                margin-right: 10px;
+            }
+
+        /* Checkout Form */
+        .checkout-page form {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .checkout-page .form-label {
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+            .checkout-page .form-label::before {
+                margin-right: 8px;
+                font-size: 1.1rem;
+            }
+
+        .checkout-page .mb-3:nth-child(1) .form-label::before {
+            content: "👤";
+        }
+
+        .checkout-page .mb-3:nth-child(2) .form-label::before {
+            content: "📧";
+        }
+
+        .checkout-page .mb-3:nth-child(3) .form-label::before {
+            content: "📱";
+        }
+
+        .checkout-page .mb-3:nth-child(4) .form-label::before {
+            content: "📍";
+        }
+
+        .checkout-page .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+
+            .checkout-page .form-control:focus {
+                border-color: #6366f1;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                background-color: white;
+            }
+
+        .checkout-page textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Place Order Button */
+        .checkout-page .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .checkout-page .btn-success:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+                background: linear-gradient(135deg, #0da271, #047857);
+            }
+
+            .checkout-page .btn-success::after {
+                content: "🚀";
+                font-size: 1.2rem;
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 992px) {
+        .checkout-page .row {
+            flex-direction: column;
+        }
+
+        .checkout-page .col-md-6:first-child {
+            border-right: none;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .checkout-page .col-md-6 {
+            width: 100%;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .checkout-page .container {
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .checkout-page h1 {
+            font-size: 2rem;
+        }
+
+        .checkout-page .col-md-6 {
+            padding: 2rem;
+        }
+
+        .checkout-page h3 {
+            font-size: 1.6rem;
+        }
+
+        .checkout-page .total-amount {
+            font-size: 1.5rem;
+            padding: 1.2rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .checkout-page .col-md-6 {
+            padding: 1.5rem;
+        }
+
+        .checkout-page h1 {
+            font-size: 1.8rem;
+        }
+
+        .checkout-page .btn-success {
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .checkout-page .table th,
+        .checkout-page .table td {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .checkout-page .form-control {
+            padding: 0.8rem;
+        }
+    }
+
+    /* Ensure columns have equal height */
+    .checkout-page .col-md-6 {
+        flex: 1;
+    }
+</style>
+
+<div class="checkout-page">
+    <div class="container py-5">
+        <h1 class="mb-4">Checkout</h1>
+
+        <div class="row">
+            <!-- Cart Summary - Left Side -->
+            <div class="col-md-6">
+                <h3>Order Summary</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.CartItems)
+                            {
+                                <tr>
+                                    <td>@item.Product?.product_name</td>
+                                    <td>@item.product_quantity</td>
+                                    <td>Rs. @item.Product?.product_price</td>
+                                    <td>Rs. @(item.product_quantity * decimal.Parse(item.Product?.product_price ?? "0"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="total-amount">
+                    <span>Total:</span>
+                    <span>Rs. @ViewBag.TotalAmount</span>
+                </div>
+            </div>
+
+            <!-- Checkout Form - Right Side -->
+            <div class="col-md-6">
+                <h3>Shipping Details</h3>
+                <form asp-action="PlaceOrder" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input name="customer_name" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input name="customer_email" type="email" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input name="customer_phone" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Shipping Address</label>
+                        <textarea name="customer_address" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

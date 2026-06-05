@@ -1,0 +1,662 @@
+﻿@model List<BookStore.Models.Cart>
+
+@{
+    ViewData["Title"] = "Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .cart-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: calc(100vh - 150px);
+        padding: 40px 0;
+    }
+
+    .cart-header {
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e6ed;
+    }
+
+        .cart-header h1 {
+            color: #2c3e50;
+            font-weight: 800;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+            .cart-header h1 i {
+                color: #3498db;
+            }
+
+    .cart-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        margin-bottom: 30px;
+    }
+
+        .cart-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .cart-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .cart-table thead {
+            background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        .cart-table th {
+            color: white;
+            font-weight: 600;
+            padding: 20px 15px;
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+
+            .cart-table th:first-child {
+                border-top-left-radius: 10px;
+                text-align: left;
+                padding-left: 30px;
+            }
+
+            .cart-table th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .cart-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+            .cart-table tbody tr:hover {
+                background-color: #f8fafc;
+                transform: scale(1.01);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+
+        .cart-table td {
+            padding: 25px 15px;
+            vertical-align: middle;
+            text-align: center;
+            color: #4a5568;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+            .cart-table td:first-child {
+                text-align: left;
+                padding-left: 30px;
+            }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-details h4 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+    }
+
+    .product-details p {
+        color: #718096;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .price {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .qty-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 2px solid #3498db;
+        background: white;
+        color: #3498db;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .qty-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.1);
+        }
+
+    .qty-input {
+        width: 60px;
+        text-align: center;
+        border: 2px solid #e0e6ed;
+        border-radius: 8px;
+        padding: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        background: #f8fafc;
+    }
+
+        .qty-input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+        }
+
+    .subtotal {
+        color: #27ae60;
+        font-weight: 800;
+        font-size: 1.3rem;
+    }
+
+    .remove-btn {
+        background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .remove-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+
+    .cart-summary {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .summary-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e0e6ed;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .summary-label {
+        color: #718096;
+        font-size: 1rem;
+    }
+
+    .summary-value {
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .total-row {
+        padding: 20px 0;
+        border-top: 2px solid #e0e6ed;
+        margin-top: 10px;
+    }
+
+    .total-label {
+        color: #2c3e50;
+        font-weight: 800;
+        font-size: 1.3rem;
+    }
+
+    .total-value {
+        color: #27ae60;
+        font-weight: 900;
+        font-size: 1.5rem;
+    }
+
+    .checkout-btn {
+        background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+        border: none;
+        padding: 18px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .checkout-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.4);
+        }
+
+    .empty-cart {
+        background: white;
+        border-radius: 20px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-cart-icon {
+        font-size: 5rem;
+        color: #a0aec0;
+        margin-bottom: 20px;
+    }
+
+    .empty-cart h3 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+    }
+
+    .empty-cart p {
+        color: #718096;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    .shop-btn {
+        background: linear-gradient(90deg, #3498db 0%, #2c3e50 100%);
+        border: none;
+        padding: 15px 40px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .shop-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 992px) {
+        .cart-table {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .product-info {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .cart-container {
+            padding: 20px 0;
+        }
+
+        .cart-header h1 {
+            font-size: 2rem;
+        }
+
+        .cart-table th,
+        .cart-table td {
+            padding: 15px 10px;
+            font-size: 0.9rem;
+        }
+
+            .cart-table th:first-child,
+            .cart-table td:first-child {
+                padding-left: 15px;
+            }
+
+        .quantity-control {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .qty-input {
+            width: 50px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .cart-header h1 {
+            font-size: 1.7rem;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .empty-cart {
+            padding: 40px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 4rem;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.5rem;
+        }
+
+        .shop-btn,
+        .checkout-btn {
+            padding: 14px 25px;
+            font-size: 1rem;
+        }
+
+        .cart-summary {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="cart-container">
+    <div class="container">
+        <!-- Header -->
+        <div class="cart-header">
+            <h1>
+                <i class="fas fa-shopping-cart"></i>
+                Your Shopping Cart
+                <span class="badge bg-primary" style="font-size: 1rem;">
+                    @Model.Count item@(Model.Count != 1 ? "s" : "")
+                </span>
+            </h1>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="row">
+                <!-- Cart Items -->
+                <div class="col-lg-8">
+                    <div class="cart-card">
+                        <div class="table-responsive">
+                            <table class="cart-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        var productPrice = decimal.TryParse(item.Product?.product_price ?? "0", out decimal price) ? price : 0;
+                                        var subtotal = item.product_quantity * productPrice;
+
+                                        <tr>
+                                            <td>
+                                                <div class="product-info">
+                                                    <div class="product-image">
+                                                        <i class="fas fa-book"></i>
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <h4>@item.Product?.product_name</h4>
+                                                        <p>ISBN: @(item.Product?.product_name ?? "N/A")</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="price">
+                                                    Rs. @productPrice.ToString("N2")
+                                                </div>
+                                            <td>
+                                                <div class="quantity-control">
+                                                    <form method="post" asp-action="UpdateQuantity" asp-route-id="@item.cart_id" class="d-inline">
+                                                        <input type="hidden" name="quantity" value="@(item.product_quantity - 1)" />
+                                                        <button type="submit" class="qty-btn" @(item.product_quantity <= 1 ? "disabled" : "")>
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <input type="text" class="qty-input" value="@item.product_quantity" readonly />
+
+                                                    <form method="post" asp-action="UpdateQuantity" asp-route-id="@item.cart_id" class="d-inline">
+                                                        <input type="hidden" name="quantity" value="@(item.product_quantity + 1)" />
+                                                        <button type="submit" class="qty-btn">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                                <div class="quantity-control">
+                                                    <form method="post" action="/Cart/UpdateQuantity/@item.cart_id" class="d-inline">
+                                                        <input type="hidden" name="quantity" value="@(item.product_quantity - 1)">
+                                                        <button type="submit" class="qty-btn" @(item.product_quantity <= 1 ? "disabled" : "")>
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </form>
+                                                    <input type="text" class="qty-input" value="@item.product_quantity" readonly>
+                                                    <form method="post" action="/Cart/UpdateQuantity/@item.cart_id" class="d-inline">
+                                                        <input type="hidden" name="quantity" value="@(item.product_quantity + 1)">
+                                                        <button type="submit" class="qty-btn">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="subtotal">
+                                                    Rs. @subtotal.ToString("N2")
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="/Cart/Remove/@item.cart_id" class="remove-btn"
+                                                   onclick="return confirm('Remove this item from cart?')">
+                                                    <i class="fas fa-trash"></i> Remove
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="cart-summary">
+                        <div class="summary-header">
+                            <i class="fas fa-receipt"></i> Order Summary
+                        </div>
+
+                        @{
+                            decimal totalAmount = 0;
+                            foreach (var item in Model)
+                            {
+                                var productPrice = decimal.TryParse(item.Product?.product_price ?? "0", out decimal price) ? price : 0;
+                                totalAmount += item.product_quantity * productPrice;
+                            }
+                            decimal shipping = totalAmount > 1000 ? 0 : 50;
+                            decimal tax = totalAmount * 0.13m; // 13% tax
+                            decimal grandTotal = totalAmount + shipping + tax;
+                        }
+
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value">Rs. @totalAmount.ToString("N2")</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping</span>
+                            <span class="summary-value">
+                                @if (shipping == 0)
+                                {
+                                    <span class="text-success">FREE</span>
+                                }
+                                else
+                                {
+                                    @:Rs. @shipping.ToString("N2")
+                                }
+                            </span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span class="summary-label">Tax (13%)</span>
+                            <span class="summary-value">Rs. @tax.ToString("N2")</span>
+                        </div>
+
+                        <div class="summary-row total-row">
+                            <span class="summary-label total-label">Total Amount</span>
+                            <span class="summary-value total-value">Rs. @grandTotal.ToString("N2")</span>
+                        </div>
+
+                        <a href="/Checkout" class="checkout-btn">
+                            <i class="fas fa-lock"></i> Proceed to Checkout
+                        </a>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-shield-alt me-1"></i>
+                                Secure checkout • Free shipping on orders over Rs. 1000
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Continue Shopping -->
+                    <div class="text-center mt-4">
+                        <a href="/Products" class="shop-btn">
+                            <i class="fas fa-arrow-left me-2"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Empty Cart -->
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3>Your Cart is Empty</h3>
+                <p>Looks like you haven't added any items to your cart yet.</p>
+                <a href="/Products" class="shop-btn">
+                    <i class="fas fa-book me-2"></i> Start Shopping Now
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Quantity update confirmation
+        document.querySelectorAll('.qty-btn[type="submit"]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const form = this.closest('form');
+                const currentQty = parseInt(form.querySelector('input[name="quantity"]').value);
+
+                if (currentQty < 1) {
+                    e.preventDefault();
+                    alert('Quantity cannot be less than 1');
+                    return false;
+                }
+
+                return true;
+            });
+        });
+
+        // Cart item hover effect
+        const cartRows = document.querySelectorAll('.cart-table tbody tr');
+        cartRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.05)';
+            });
+
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Update cart count in navbar
+        function updateCartCount() {
+            const cartCount = @Model.Count;
+            const cartBadge = document.getElementById('cartCount');
+            if (cartBadge) {
+                if (cartCount > 0) {
+                    cartBadge.textContent = cartCount;
+                    cartBadge.style.display = 'flex';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize cart count
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+}

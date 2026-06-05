@@ -1,0 +1,286 @@
+﻿@{
+    ViewData["Title"] = "Track Your Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Add custom CSS for the track order page -->
+<style>
+    /* Custom styling for track order page */
+    .track-order-page {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        min-height: calc(100vh - 120px);
+        padding-top: 2rem;
+    }
+
+        .track-order-page h1 {
+            color: #2c3e50;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+            .track-order-page h1::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 4px;
+                background: linear-gradient(90deg, #3498db, #2ecc71);
+                border-radius: 2px;
+            }
+
+        .track-order-page .card {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            background: white;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 35px rgba(52, 152, 219, 0.1);
+        }
+
+            .track-order-page .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+            }
+
+        .track-order-page .card-body {
+            padding: 2.5rem;
+        }
+
+        .track-order-page .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+            .track-order-page .form-label::before {
+                content: "📦";
+                margin-right: 10px;
+                font-size: 1.2rem;
+            }
+
+        .track-order-page .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+            .track-order-page .form-control:focus {
+                border-color: #3498db;
+                box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+                background-color: white;
+                transform: translateY(-2px);
+            }
+
+            .track-order-page .form-control::placeholder {
+                color: #aaa;
+                font-style: italic;
+            }
+
+        .track-order-page .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+            margin-top: 1.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+            .track-order-page .btn-primary::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: all 0.6s ease;
+                z-index: -1;
+            }
+
+            .track-order-page .btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+                background: linear-gradient(135deg, #2980b9, #27ae60);
+            }
+
+                .track-order-page .btn-primary:hover::before {
+                    left: 100%;
+                }
+
+            .track-order-page .btn-primary:active {
+                transform: translateY(0);
+            }
+
+            .track-order-page .btn-primary::after {
+                content: "🔍";
+                margin-left: 10px;
+                font-size: 1.1rem;
+            }
+
+        /* Error alert styling */
+        .track-order-page .alert-danger {
+            border-radius: 15px;
+            border: none;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 8px 20px rgba(238, 90, 82, 0.2);
+            margin-bottom: 2rem;
+            border-left: 5px solid #c0392b;
+            animation: shake 0.5s ease;
+        }
+
+    @@keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        75% {
+            transform: translateX(5px);
+        }
+    }
+
+    .track-order-page .alert-danger::before {
+        content: "⚠️";
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    /* Decorative elements */
+    .track-order-page::before {
+        content: "";
+        position: absolute;
+        top: 10%;
+        right: 10%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        z-index: -1;
+    }
+
+    .track-order-page::after {
+        content: "";
+        position: absolute;
+        bottom: 10%;
+        left: 5%;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(46, 204, 113, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        z-index: -1;
+    }
+
+    /* Animation for form */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .track-order-page .card {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .track-order-page .card-body {
+            padding: 2rem;
+        }
+
+        .track-order-page h1 {
+            font-size: 2rem;
+        }
+
+        .track-order-page::before,
+        .track-order-page::after {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .track-order-page {
+            padding-top: 1rem;
+        }
+
+            .track-order-page .card-body {
+                padding: 1.5rem;
+            }
+
+            .track-order-page h1 {
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
+            }
+
+            .track-order-page .btn-primary {
+                padding: 0.9rem;
+                font-size: 1.1rem;
+            }
+    }
+
+    /* Container specific styling */
+    .track-order-page .container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="track-order-page">
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">Track Your Order</h1>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form asp-action="Track" method="post">
+                            <div class="mb-4">
+                                <label class="form-label">Enter your Order Number</label>
+                                <input name="orderNumber" class="form-control" required placeholder="e.g. 26011901" />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Track Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

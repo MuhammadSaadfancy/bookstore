@@ -1,0 +1,545 @@
+﻿@{
+    ViewData["Title"] = "Admin Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Shradha Book Stores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            body:before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -20%;
+                width: 60%;
+                height: 200%;
+                background: linear-gradient(45deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.05));
+                transform: rotate(30deg);
+                z-index: 0;
+            }
+
+            body:after {
+                content: '';
+                position: absolute;
+                bottom: -50%;
+                left: -20%;
+                width: 60%;
+                height: 200%;
+                background: linear-gradient(45deg, rgba(44, 62, 80, 0.1), rgba(52, 73, 94, 0.05));
+                transform: rotate(-30deg);
+                z-index: 0;
+            }
+
+        .admin-login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .admin-login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: none;
+        }
+
+            .admin-login-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            }
+
+        .admin-header {
+            background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .admin-header:before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+                background-size: 30px 30px;
+                animation: float 20s linear infinite;
+            }
+
+        .admin-logo {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+            .admin-logo i {
+                color: #f1c40f;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            }
+
+        .admin-title {
+            color: white;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-body {
+            padding: 40px;
+            background: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .form-label i {
+                color: #3498db;
+                width: 20px;
+            }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            height: 50px;
+        }
+
+            .form-control:focus {
+                border-color: #3498db;
+                box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+                background-color: white;
+                transform: translateY(-2px);
+            }
+
+            .form-control::placeholder {
+                color: #a0aec0;
+            }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+            font-size: 1.1rem;
+            z-index: 10;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px;
+        }
+
+            .password-toggle:hover {
+                color: #3498db;
+            }
+
+        .btn-admin {
+            background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+            border: none;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: white;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-admin:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: left 0.6s ease;
+            }
+
+            .btn-admin:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 30px rgba(52, 152, 219, 0.3);
+            }
+
+                .btn-admin:hover:before {
+                    left: 100%;
+                }
+
+            .btn-admin i {
+                margin-right: 8px;
+            }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .alert-danger {
+            background: linear-gradient(90deg, #fee 0%, #fff5f5 100%);
+            color: #c53030;
+            border-left: 5px solid #e53e3e;
+        }
+
+            .alert-danger i {
+                color: #e53e3e;
+                font-size: 1.2rem;
+            }
+
+        .website-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #f0f8ff;
+            border-radius: 50px;
+            border: 2px solid #d6eaf8;
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+
+            .website-link:hover {
+                color: #2c3e50;
+                background: #e6f7ff;
+                border-color: #3498db;
+                transform: translateY(-2px);
+                text-decoration: none;
+            }
+
+            .website-link i {
+                transition: transform 0.3s ease;
+            }
+
+            .website-link:hover i {
+                transform: translateX(5px);
+            }
+
+        .admin-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .security-note {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+            font-size: 0.85rem;
+            border-left: 3px solid #3498db;
+        }
+
+            .security-note i {
+                color: #3498db;
+                margin-right: 5px;
+            }
+
+        /* Animations */
+        @@keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes float {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .admin-body {
+                padding: 30px 25px;
+            }
+
+            .admin-header {
+                padding: 30px 20px;
+            }
+
+            .admin-title {
+                font-size: 1.7rem;
+            }
+
+            .admin-logo {
+                font-size: 2.2rem;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+
+            .admin-body {
+                padding: 25px 20px;
+            }
+
+            .admin-header {
+                padding: 25px 15px;
+            }
+
+            .admin-title {
+                font-size: 1.5rem;
+            }
+
+            .admin-logo {
+                font-size: 2rem;
+            }
+
+            .form-control {
+                padding: 12px 12px 12px 40px;
+                font-size: 0.95rem;
+            }
+
+            .btn-admin {
+                padding: 14px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-card">
+            <!-- Header -->
+            <div class="admin-header">
+                <div class="admin-logo">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h1 class="admin-title">Admin Portal</h1>
+                <div class="admin-subtitle">Shradha Book Stores Management System</div>
+            </div>
+
+            <!-- Body -->
+            <div class="admin-body">
+                <!-- Error Message -->
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        @ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form method="post" asp-action="Login" id="adminLoginForm">
+                    <!-- Email Field -->
+                    <div class="mb-4">
+                        <label for="Admin_Email" class="form-label">
+                            <i class="fas fa-user-shield"></i> Admin Email
+                        </label>
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="Admin_Email" name="Admin_Email"
+                                   placeholder="Enter admin email" required>
+                            <div class="input-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-4">
+                        <label for="Admin_Password" class="form-label">
+                            <i class="fas fa-key"></i> Admin Password
+                        </label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="Admin_Password"
+                                   name="Admin_Password" placeholder="Enter admin password" required>
+                            <div class="input-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Note -->
+                    <div class="security-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Secure admin access only. Unauthorized access is prohibited.
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn btn-admin">
+                        <i class="fas fa-sign-in-alt"></i> Admin Login
+                    </button>
+                </form>
+
+                <!-- Back to Website Link -->
+                <div class="text-center mt-4">
+                    <a href="/Home/Index" class="website-link">
+                        <i class="fas fa-globe"></i> Back to Main Website
+                    </a>
+                </div>
+
+                <!-- Footer -->
+                <div class="admin-footer">
+                    <p>© @DateTime.Now.Year Shradha Book Stores | Admin System v1.0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password visibility toggle
+        document.getElementById('togglePassword')?.addEventListener('click', function() {
+            const passwordInput = document.getElementById('Admin_Password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Form validation and loading state
+        document.getElementById('adminLoginForm')?.addEventListener('submit', function(e) {
+            const email = document.getElementById('Admin_Email');
+            const password = document.getElementById('Admin_Password');
+
+            if (!email.value || !password.value) {
+                e.preventDefault();
+                alert('Please enter both email and password.');
+                if (!email.value) email.focus();
+                else password.focus();
+                return false;
+            }
+
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Authenticating...';
+            submitBtn.disabled = true;
+
+            // Re-enable button after 5 seconds if submission fails
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+
+            return true;
+        });
+
+        // Auto-focus email field
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailField = document.getElementById('Admin_Email');
+            if (emailField) {
+                setTimeout(() => emailField.focus(), 300);
+            }
+        });
+
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

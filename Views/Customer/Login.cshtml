@@ -1,0 +1,396 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Login - Shradha Book Stores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .login-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .login-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .login-header {
+        background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+        padding: 25px 30px;
+        text-align: center;
+        position: relative;
+    }
+
+        .login-header h3 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .login-header:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #2c3e50;
+        }
+
+    .login-body {
+        padding: 40px;
+        background: white;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-label i {
+            color: #3498db;
+            width: 20px;
+        }
+
+    .input-group {
+        position: relative;
+    }
+
+    .form-control {
+        padding: 12px 15px 12px 45px;
+        border: 2px solid #e0e6ed;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+    }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+            background-color: white;
+        }
+
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #3498db;
+        z-index: 10;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #718096;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .btn-success {
+        background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+        border: none;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+        }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid #10b981;
+    }
+
+    .alert-danger {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border-left: 4px solid #ef4444;
+    }
+
+    .text-danger {
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .register-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .register-link:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e6ed;
+        color: #718096;
+        font-size: 0.95rem;
+    }
+
+    .remember-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 20px 0;
+    }
+
+        .remember-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid #cbd5e0;
+        }
+
+        .remember-check label {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .login-container {
+            padding: 20px 0;
+        }
+
+        .login-body {
+            padding: 30px 20px;
+        }
+
+        .login-header {
+            padding: 20px;
+        }
+
+            .login-header h3 {
+                font-size: 1.5rem;
+            }
+
+        .form-control {
+            padding: 10px 12px 10px 40px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .login-body {
+            padding: 25px 15px;
+        }
+
+        .form-control {
+            padding: 10px 12px 10px 40px;
+            font-size: 0.95rem;
+        }
+
+        .btn-success {
+            padding: 12px;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="login-card">
+                    <!-- Header -->
+                    <div class="login-header">
+                        <h3><i class="fas fa-sign-in-alt me-2"></i>Login to Your Account</h3>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="login-body">
+                        <!-- Success Message -->
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                @TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <!-- Error Message -->
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                @ViewBag.Error
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <form asp-action="Login" method="post" id="loginForm">
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope me-1"></i> Email Address *
+                                </label>
+                                <div class="input-group">
+                                    <input type="email" name="customer_email" class="form-control"
+                                           placeholder="Enter your registered email" required />
+                                    <div class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-1"></i> Password *
+                                </label>
+                                <div class="input-group">
+                                    <input type="password" name="customer_password"
+                                           class="form-control" id="password"
+                                           placeholder="Enter your password" required />
+                                    <div class="input-icon">
+                                        <i class="fas fa-key"></i>
+                                    </div>
+                                    <button type="button" class="password-toggle" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Remember Me Checkbox -->
+                            <div class="remember-check mb-4">
+                                <input type="checkbox" id="rememberMe" name="rememberMe" />
+                                <label for="rememberMe">Remember me on this device</label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login Now
+                            </button>
+                        </form>
+
+                        <!-- Forgot Password Link -->
+                        <div class="text-center mt-3">
+                            <a href="/Customer/ForgotPassword" class="text-decoration-none">
+                                <i class="fas fa-key me-1"></i> Forgot Password?
+                            </a>
+                        </div>
+
+                        <!-- Register Link -->
+                        <div class="login-footer">
+                            <p>Don't have an account?</p>
+                            <a href="/Customer/Register" class="register-link">
+                                <i class="fas fa-user-plus me-1"></i> Create New Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const email = document.querySelector('input[name="customer_email"]');
+            const password = document.getElementById('password');
+
+            if (!email.value || !password.value) {
+                e.preventDefault();
+                alert('Please fill in both email and password fields.');
+                if (!email.value) email.focus();
+                else password.focus();
+                return false;
+            }
+
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging in...';
+            submitBtn.disabled = true;
+
+            // Re-enable button after 5 seconds if submission fails
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+
+            return true;
+        });
+
+        // Auto-focus email field
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailField = document.querySelector('input[name="customer_email"]');
+            if (emailField) {
+                setTimeout(() => emailField.focus(), 300);
+            }
+        });
+    </script>
+}

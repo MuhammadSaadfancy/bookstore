@@ -1,0 +1,252 @@
+﻿@{
+    ViewData["Title"] = "Order Placed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Add custom CSS for the order confirmation page -->
+<style>
+    /* Custom styling for order confirmation page */
+    .order-confirmation {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .order-confirmation .alert-success {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.15);
+            padding: 2.5rem;
+            background: linear-gradient(145deg, #f8fff9, #e6f7ea);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .order-confirmation .alert-success::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 5px;
+                background: linear-gradient(90deg, #28a745, #20c997, #28a745);
+                background-size: 200% 100%;
+                animation: shimmer 3s infinite linear;
+            }
+
+    @@keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .order-confirmation h2 {
+        color: #28a745;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 2.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+        .order-confirmation h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #28a745;
+            border-radius: 2px;
+        }
+
+    .order-confirmation p {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .order-confirmation h4 {
+        color: #333;
+        margin: 1.8rem 0;
+        font-weight: 600;
+    }
+
+    .order-confirmation strong {
+        color: #28a745;
+        background-color: rgba(40, 167, 69, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        display: inline-block;
+        font-size: 1.4rem;
+        border: 2px dashed #28a745;
+        letter-spacing: 1px;
+        font-family: 'Courier New', monospace;
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.03);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .order-confirmation .btn-primary {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        border-radius: 50px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+        .order-confirmation .btn-primary::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+
+        .order-confirmation .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+            .order-confirmation .btn-primary:hover::before {
+                left: 100%;
+            }
+
+        .order-confirmation .btn-primary:active {
+            transform: translateY(0);
+        }
+
+    /* Success icon animation */
+    .success-icon {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        background-color: #28a745;
+        border-radius: 50%;
+        position: relative;
+        margin-bottom: 1.5rem;
+        animation: icon-appear 0.8s ease-out;
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    @@keyframes icon-appear {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        70% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .success-icon::before,
+    .success-icon::after {
+        content: "";
+        position: absolute;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .success-icon::before {
+        width: 25px;
+        height: 5px;
+        top: 45px;
+        left: 22px;
+        transform: rotate(45deg);
+    }
+
+    .success-icon::after {
+        width: 40px;
+        height: 5px;
+        top: 38px;
+        left: 30px;
+        transform: rotate(-45deg);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .order-confirmation .alert-success {
+            padding: 2rem 1.5rem;
+        }
+
+        .order-confirmation h2 {
+            font-size: 2rem;
+        }
+
+        .order-confirmation strong {
+            font-size: 1.2rem;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .order-confirmation h2 {
+            font-size: 1.8rem;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+            .success-icon::before {
+                width: 18px;
+                height: 4px;
+                top: 34px;
+                left: 16px;
+            }
+
+            .success-icon::after {
+                width: 30px;
+                height: 4px;
+                top: 29px;
+                left: 22px;
+            }
+    }
+</style>
+
+<div class="container py-5 text-center order-confirmation">
+    <div class="alert alert-success">
+        <!-- Success icon -->
+        <div class="success-icon"></div>
+
+        <h2>Thank You!</h2>
+        <p>Your order has been placed successfully.</p>
+        <h4>Your Order Number: <strong>@ViewBag.OrderNumber</strong></h4>
+        <p>We will contact you soon for confirmation.</p>
+        <p>Use this order number to track your order.</p>
+        <a href="/" class="btn btn-primary mt-3">Back to Home</a>
+    </div>
+</div>

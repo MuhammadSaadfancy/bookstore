@@ -1,0 +1,98 @@
+﻿@model BookStore.Models.Product
+@{
+    ViewData["Title"] = "Add Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Add New Product</h1>
+        <a href="/Admin/Products" class="btn btn-secondary">Back to Products</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Product Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" asp-action="AddProduct">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="product_name" class="form-label">Product Name *</label>
+                                    <input asp-for="product_name" class="form-control" required>
+                                    <span asp-validation-for="product_name" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="cat_id" class="form-label">Category *</label>
+                                    <select asp-for="cat_id" class="form-control" required>
+                                        <option value="">Select Category</option>
+                                        @foreach (var category in ViewBag.Categories)
+                                        {
+                                            <option value="@category.Category_Id">@category.Category_Name</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="cat_id" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="product_price" class="form-label">Price (Rs) *</label>
+                                    <input asp-for="product_price" class="form-control" type="number" step="0.01" required>
+                                    <span asp-validation-for="product_price" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="StockQuantity" class="form-label">Stock Quantity</label>
+                                    <input asp-for="StockQuantity" class="form-control" type="number" min="0">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Author" class="form-label">Author (For Books)</label>
+                                    <input asp-for="Author" class="form-control">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Publisher" class="form-label">Publisher</label>
+                                    <input asp-for="Publisher" class="form-control">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Image</label>
+                                    <input type="file" name="productImage" class="form-control" accept="image/*">
+                                    <small class="text-muted">Max 2MB. JPG, PNG, GIF supported.</small>
+                                </div>
+
+                                <div class="mb-3 form-check">
+                                    <input asp-for="IsActive" class="form-check-input">
+                                    <label asp-for="IsActive" class="form-check-label">Product is active</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="product_description" class="form-label">Description</label>
+                            <textarea asp-for="product_description" class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Add Product
+                            </button>
+                            <a href="/Admin/Products" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <h6><i class="fas fa-info-circle"></i> Note:</h6>
+                <p class="mb-0">Product code will be automatically generated based on category and sequence.</p>
+            </div>
+        </div>
+    </div>
+</div>

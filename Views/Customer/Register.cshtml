@@ -1,0 +1,467 @@
+﻿@model BookStore.Models.Customer
+@{
+    ViewData["Title"] = "Sign Up - Shradha Book Stores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .signup-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .signup-card {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .signup-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .signup-header {
+        background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+        padding: 25px 30px;
+        text-align: center;
+        position: relative;
+    }
+
+        .signup-header h3 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .signup-header:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #2c3e50;
+        }
+
+    .signup-body {
+        padding: 40px;
+        background: white;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        padding: 12px 15px;
+        border: 2px solid #e0e6ed;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+    }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+            background-color: white;
+        }
+
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #3498db;
+        z-index: 10;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #718096;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #3498db 0%, #2c3e50 100%);
+        border: none;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid #10b981;
+    }
+
+    .alert-danger {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border-left: 4px solid #ef4444;
+    }
+
+    .text-danger {
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .login-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .login-link:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+
+        .login-link i {
+            font-size: 0.9rem;
+        }
+
+    .form-footer {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e6ed;
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    .terms-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 20px 0;
+    }
+
+        .terms-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid #cbd5e0;
+        }
+
+        .terms-check label {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+            .terms-check label a {
+                color: #3498db;
+                text-decoration: none;
+            }
+
+                .terms-check label a:hover {
+                    text-decoration: underline;
+                }
+
+    .password-strength {
+        height: 4px;
+        background: #e0e6ed;
+        border-radius: 2px;
+        margin-top: 8px;
+        overflow: hidden;
+    }
+
+    .strength-bar {
+        height: 100%;
+        width: 0;
+        border-radius: 2px;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .signup-container {
+            padding: 20px 0;
+        }
+
+        .signup-body {
+            padding: 30px 20px;
+        }
+
+        .signup-header {
+            padding: 20px;
+        }
+
+            .signup-header h3 {
+                font-size: 1.5rem;
+            }
+    }
+
+    @@media (max-width: 576px) {
+        .signup-body {
+            padding: 25px 15px;
+        }
+
+        .form-control {
+            padding: 10px 12px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            padding: 12px;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="signup-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="signup-card">
+                    <!-- Header -->
+                    <div class="signup-header">
+                        <h3><i class="fas fa-user-plus me-2"></i>Create New Account</h3>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="signup-body">
+                        <!-- Success Message -->
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                @TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <!-- Error Messages -->
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Please fix these errors:</strong>
+                                </div>
+                                <ul class="mb-0 mt-2">
+                                    @foreach (var modelState in ViewData.ModelState)
+                                    {
+                                        foreach (var error in modelState.Value.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    }
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <form asp-action="Register" method="post" id="signupForm">
+                            <!-- Name Field -->
+                            <div class="mb-4">
+                                <label asp-for="customer_name" class="form-label">
+                                    <i class="fas fa-user me-1"></i> Full Name *
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="customer_name" class="form-control"
+                                           placeholder="Enter your full name" required />
+                                </div>
+                                <span asp-validation-for="customer_name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                <label asp-for="customer_email" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i> Email Address *
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="customer_email" type="email" class="form-control"
+                                           placeholder="example@email.com" required />
+                                </div>
+                                <span asp-validation-for="customer_email" class="text-danger"></span>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label asp-for="customer_password" class="form-label">
+                                    <i class="fas fa-lock me-1"></i> Password *
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="customer_password" type="password"
+                                           class="form-control" id="password"
+                                           placeholder="At least 6 characters"
+                                           required minlength="6" />
+                                    <button type="button" class="password-toggle" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="strength-bar" id="strengthBar"></div>
+                                </div>
+                                <span asp-validation-for="customer_password" class="text-danger"></span>
+                            </div>
+
+                            <!-- Phone Field -->
+                            <div class="mb-4">
+                                <label asp-for="customer_phone" class="form-label">
+                                    <i class="fas fa-phone me-1"></i> Phone Number
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="customer_phone" class="form-control"
+                                           placeholder="Optional phone number" />
+                                </div>
+                            </div>
+
+                            <!-- Address Field -->
+                            <div class="mb-4">
+                                <label asp-for="customer_address" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1"></i> Address
+                                </label>
+                                <div class="input-group">
+                                    <textarea asp-for="customer_address" class="form-control"
+                                              rows="3" placeholder="Optional delivery address"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Terms & Conditions -->
+                            <div class="terms-check mb-4">
+                                <input type="checkbox" id="agreeTerms" required />
+                                <label for="agreeTerms">
+                                    I agree to the <a href="/Terms">Terms & Conditions</a> and
+                                    <a href="/Privacy">Privacy Policy</a> *
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i> Create Account
+                            </button>
+                        </form>
+
+                        <!-- Login Link -->
+                        <div class="form-footer">
+                            <p>
+                                Already have an account?
+                                <a href="/Customer/Login" class="login-link">
+                                    <i class="fas fa-sign-in-alt"></i> Login Here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('strengthBar');
+            let strength = 0;
+
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            const width = (strength / 5) * 100;
+            strengthBar.style.width = width + '%';
+
+            if (strength <= 2) {
+                strengthBar.style.backgroundColor = '#ef4444'; // Red
+            } else if (strength <= 4) {
+                strengthBar.style.backgroundColor = '#f59e0b'; // Orange
+            } else {
+                strengthBar.style.backgroundColor = '#10b981'; // Green
+            }
+        });
+
+        // Form validation enhancement
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            const terms = document.getElementById('agreeTerms');
+            if (!terms.checked) {
+                e.preventDefault();
+                alert('Please agree to the Terms & Conditions');
+                terms.focus();
+                return false;
+            }
+            return true;
+        });
+
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
+}

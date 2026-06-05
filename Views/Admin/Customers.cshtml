@@ -1,0 +1,118 @@
+﻿@model List<BookStore.Models.Customer>
+@{
+    ViewData["Title"] = "Manage Customers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Customers</h1>
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary" onclick="exportCustomers()">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">All Customers</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var customer in Model)
+                        {
+                            <tr>
+                                <td>@customer.customer_id</td>
+                                <td>
+                                    <strong>@customer.customer_name</strong>
+                                    <br>
+                                    <small class="text-muted">Customer ID: CUST-@customer.customer_id.ToString("D5")</small>
+                                </td>
+                                <td>
+                                    <a href="mailto:@customer.customer_email" class="text-primary">
+                                        @customer.customer_email
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="tel:@customer.customer_phone" class="text-success">
+                                        @customer.customer_phone
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@customer.customer_gender</span>
+                                </td>
+                                <td>@customer.customer_city</td>
+                                <td>@customer.customer_country</td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm"
+                                            onclick="viewCustomerDetails(@customer.customer_id)">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Details Modal -->
+<div class="modal fade" id="customerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="customerDetails">
+                Loading...
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function viewCustomerDetails(customerId) {
+            $.ajax({
+                url: '/Admin/GetCustomerDetails?id=' + customerId,
+                type: 'GET',
+                success: function(data) {
+                    $('#customerDetails').html(data);
+                    $('#customerModal').modal('show');
+                },
+                error: function() {
+                    $('#customerDetails').html('<div class="alert alert-danger">Failed to load customer details.</div>');
+                    $('#customerModal').modal('show');
+                }
+            });
+        }
+
+        function exportCustomers() {
+            alert('Export feature would be implemented here.');
+        }
+
+        $(document).ready(function() {
+            $('.data-table').DataTable({
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+}

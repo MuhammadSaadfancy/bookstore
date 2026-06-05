@@ -1,0 +1,122 @@
+﻿@model List<BookStore
+.Models.Product>
+@{
+    ViewData["Title"] = "Manage Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Products</h1>
+        <a href="/Admin/AddProduct" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Product
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">All Products</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Code</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@product.product_id</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(product.product_image))
+                                    {
+                                        <img src="@product.product_image" alt="Product Image"
+                                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light d-flex align-items-center justify-content-center"
+                                             style="width: 60px; height: 60px; border-radius: 5px;">
+                                            <i class="fas fa-box text-muted"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <strong>@product.product_name</strong>
+                                    @if (!string.IsNullOrEmpty(product.Author))
+                                    {
+                                        <br>
+                                        <small class="text-muted">By @product.Author</small>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@product.ProductCode</span>
+                                </td>
+                                <td>@(product.Category?.Category_Name ?? "N/A")</td>
+                                <td>@product.product_price</td>
+                                <td>
+                                    @if (product.StockQuantity > 10)
+                                    {
+                                        <span class="badge bg-success">@product.StockQuantity in stock</span>
+                                    }
+                                    else if (product.StockQuantity > 0)
+                                    {
+                                        <span class="badge bg-warning">@product.StockQuantity left</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Out of stock</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (product.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="/Admin/EditProduct/@product.product_id"
+                                           class="btn btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="/Admin/DeleteProduct/@product.product_id"
+                                           class="btn btn-danger" title="Delete"
+                                           onclick="return confirmDelete('Delete product @product.product_name?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.data-table').DataTable({
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+}
